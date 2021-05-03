@@ -28,4 +28,4 @@ server.get('/movie/:id', wrap(async (req, res) => {
   }
 }));
 
-server.listen(3001, '127.0.0.1');
+server.listen(3006, '127.0.0.1');
