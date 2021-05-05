@@ -1,7 +1,7 @@
 const { db } = require('../lib/db');
 
 async function getAllMovies() {
-  const movies = await db.query('SELECT * FROM movie');
+  const movies = await db.query('SELECT * FROM movie ORDER BY premiere_date DESC');
   return movies.rows.map((movie) => {
     return {
       ...movie,
