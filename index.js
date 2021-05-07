@@ -1,6 +1,6 @@
 const restify = require('restify');
 const { getAllMovies, getMovie } = require('./endpoint/movie');
-const { getAllShowtimes, getShowtime } = require('./endpoint/showtime');
+const { getAllShowtimes, getShowtime, getShowtimeByMovieId } = require('./endpoint/showtime');
 
 const wrap = function (fn) {
   return function (req, res, next) {
@@ -35,8 +35,19 @@ server.get('/showtime', wrap(async (req, res) => {
   res.send(showtimes);
 }));
 
-server.get('/showtime/:movie_id', wrap(async (req, res) => {
-  const showtime = await getShowtime(req.params.movie_id);
+server.get('/showtime/:id', wrap(async (req, res) => {
+  const showtime = await getShowtime(req.params.id);
+  res.header('content-type', 'json');
+  if (showtime === null) {
+    res.status(404);
+    res.send({ message: 'Сеансы не найдены' });
+  } else {
+    res.send(showtime);
+  }
+}));
+
+server.get('/showtime/movie/:movie_id', wrap(async (req, res) => {
+  const showtime = await getShowtimeByMovieId(req.params.movie_id);
   res.header('content-type', 'json');
   if (showtime === null) {
     res.status(404);

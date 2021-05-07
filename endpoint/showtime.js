@@ -10,8 +10,18 @@ async function getAllShowtimes() {
   });
 }
 
-async function getShowtime(movie_id) {
-  const showtimes = await db.query('SELECT * FROM showtime WHERE showtime_date > CURRENT_DATE ORDER BY showtime_date AND movie_id = $1', [movie_id]);
+async function getShowtime(id) {
+  const showtimes = await db.query('SELECT * FROM showtime WHERE showtime_id = $1', [id]);
+  return showtimes.rows.map((showtime) => {
+    return {
+      ...showtime,
+      price: Number(showtime.price)
+    };
+  });
+}
+
+async function getShowtimeByMovieId(movie_id) {
+  const showtimes = await db.query('SELECT * FROM showtime WHERE showtime_date > CURRENT_DATE AND movie_id = $1 ORDER BY showtime_date', [movie_id]);
   return showtimes.rows.map((showtime) => {
     return {
       ...showtime,
@@ -22,5 +32,6 @@ async function getShowtime(movie_id) {
 
 module.exports = {
   getAllShowtimes,
-  getShowtime
+  getShowtime,
+  getShowtimeByMovieId
 };
