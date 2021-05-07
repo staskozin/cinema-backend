@@ -43,6 +43,27 @@
 ### GET /showtime
 Получить список всех сеансов
 ```json
+[
+  {
+    "showtime_id": 1,
+    "showtime_date": "2021-06-03T08:45:00.000Z",
+    "price": 175,
+    "movie_id": 1266725,
+    "hall_id": 1
+  },
+  {
+    "showtime_id": 2,
+    "showtime_date": "2021-06-03T10:30:00.000Z",
+    "price": 400,
+    "movie_id": 1266725,
+    "hall_id": 1
+  }
+]
+```
+
+### GET /showtime/id
+Получить сеанс по id
+```json
 {
   "showtime_id": 1,
   "showtime_date": "2021-06-03T08:45:00.000Z",
@@ -52,7 +73,7 @@
 }
 ```
 
-### GET /showtime/movie_id
+### GET /showtime/movie/movie_id
 Получить список всех сеансов фильма
 ```json
 [
