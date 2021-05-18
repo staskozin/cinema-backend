@@ -1,4 +1,5 @@
 const { db } = require('../lib/db');
+const { getAllSeatsByHallAndDate } = require('./seat');
 
 async function getAllShowtimes() {
   const showtimes = await db.query('SELECT * FROM showtime WHERE showtime_date > CURRENT_DATE ORDER BY showtime_date');
@@ -11,10 +12,13 @@ async function getAllShowtimes() {
 }
 
 async function getShowtime(id) {
-  const showtimes = await db.query('SELECT * FROM showtime WHERE showtime_id = $1', [id]);
+  const showtime = await db.query('SELECT s.showtime_id, s.showtime_date, s.showtime_date + m.duration AS "showtime_end_date", s.price, s.movie_id, s.hall_id, m.movie_name, m.age_restriction FROM showtime s JOIN movie m ON s.movie_id = m.movie_id WHERE showtime_id = $1', [id]);
+  const seats = await getAllSeatsByHallAndDate(showtime.rows[0].hall_id, showtime.rows[0].showtime_date, showtime.rows[0].showtime_end_date);
   return {
-    ...showtimes.rows[0],
-    price: Number(showtimes.rows[0].price)
+    ...showtime.rows[0],
+    price: Number(showtime.rows[0].price),
+    age_restriction: Number(showtime.rows[0].age_restriction),
+    seats
   };
 }
 
