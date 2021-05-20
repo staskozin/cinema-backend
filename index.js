@@ -1,5 +1,6 @@
 const restify = require('restify');
 const { getAllMovies, getMovie } = require('./endpoint/movie');
+const { reserve } = require('./endpoint/reserve');
 const { getAllShowtimes, getShowtime, getShowtimesByMovieId } = require('./endpoint/showtime');
 
 const wrap = function (fn) {
@@ -11,6 +12,15 @@ const wrap = function (fn) {
 };
 
 const server = restify.createServer();
+server.use(restify.plugins.bodyParser({ mapParams: false }));
+
+server.post('/reserve', wrap(async (req, res) => {
+  const { showtime_id, seats, phone } = req.body;
+  const isSuccessful = await reserve(showtime_id, seats, phone);
+  if (!isSuccessful)
+    res.status(500);
+  res.send();
+}));
 
 server.get('/movie', wrap(async (req, res) => {
   const movies = await getAllMovies();
