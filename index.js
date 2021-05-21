@@ -2,6 +2,7 @@ const restify = require('restify');
 const { getAllMovies, getMovie } = require('./endpoint/movie');
 const { reserve } = require('./endpoint/reserve');
 const { getAllShowtimes, getShowtime, getShowtimesByMovieId } = require('./endpoint/showtime');
+const { getAllReservations, getReservation } = require('./endpoint/reservation');
 
 const wrap = function (fn) {
   return function (req, res, next) {
@@ -13,6 +14,23 @@ const wrap = function (fn) {
 
 const server = restify.createServer();
 server.use(restify.plugins.bodyParser({ mapParams: false }));
+
+server.get('/reservation', wrap(async (req, res) => {
+  const reservations = await getAllReservations();
+  res.header('content-type', 'json');
+  res.send(reservations);
+}));
+
+server.get('/reservation/:id', wrap(async (req, res) => {
+  const reservation = await getReservation(req.params.id);
+  res.header('content-type', 'json');
+  if (reservation === null) {
+    res.status(404);
+    res.send({ message: 'Бронирование не найдено' });
+  } else {
+    res.send(reservation);
+  }
+}));
 
 server.post('/reserve', wrap(async (req, res) => {
   const { showtime_id, seats, phone } = req.body;
