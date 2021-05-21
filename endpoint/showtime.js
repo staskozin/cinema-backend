@@ -12,7 +12,7 @@ async function getAllShowtimes() {
 }
 
 async function getShowtime(id) {
-  const showtime = await db.query('SELECT s.showtime_id, s.showtime_date, s.showtime_date + m.duration AS "showtime_end_date", s.price, s.movie_id, s.hall_id, m.movie_name, m.age_restriction FROM showtime s JOIN movie m ON s.movie_id = m.movie_id WHERE showtime_id = $1', [id]);
+  const showtime = await db.query('SELECT s.showtime_id, s.showtime_date, s.showtime_date + m.duration AS "showtime_end_date", s.price, s.movie_id, s.hall_id, h.hall_name, m.movie_name, m.age_restriction FROM showtime s JOIN movie m ON s.movie_id = m.movie_id JOIN hall h ON s.hall_id = h.hall_id WHERE showtime_id = $1', [id]);
   const seats = await getAllSeatsByHallAndDate(showtime.rows[0].hall_id, showtime.rows[0].showtime_date, showtime.rows[0].showtime_end_date);
   return {
     ...showtime.rows[0],
