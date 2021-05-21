@@ -34,10 +34,11 @@ server.get('/reservation/:id', wrap(async (req, res) => {
 
 server.post('/reserve', wrap(async (req, res) => {
   const { showtime_id, seats, phone } = req.body;
-  const isSuccessful = await reserve(showtime_id, seats, phone);
-  if (!isSuccessful)
+  const reservation = await reserve(showtime_id, seats, phone);
+  res.header('content-type', 'json');
+  if (!reservation.reservation_id)
     res.status(500);
-  res.send();
+  res.send(reservation);
 }));
 
 server.get('/movie', wrap(async (req, res) => {
