@@ -10,7 +10,6 @@
   "author": "Stanislav Kozin",
   "license": "ISC",
   "dependencies": {
-    "dotenv": "^8.2.0",
     "pg": "^8.3.3",
     "pg-format": "^1.0.4",
     "restify": "^8.5.1"
