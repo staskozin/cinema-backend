@@ -4,6 +4,8 @@
 
 Написан на Node.js с использованием Restify. База данных на PostgreSQL.
 
+[Репозиторий с фронтендом](https://github.com/staskozin/cinema-frontend)
+
 ## Методы
 ### GET /movie
 Получить список всех фильмов
